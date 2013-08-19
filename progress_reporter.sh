@@ -58,12 +58,13 @@ progress_reporter_new()
 }
 
 # $1 - result from progress_reporter_new()
-# $2 - current value
+# $2 - current value; if not provided, try to read from stdout
 progress_reporter_update()
 {
 	local min
 	local max
 	local cur
+	local line
 
 	min=${1%,[0-9]*}
 	[ -z $min ] && progress_reporter__errx 'progress_reporter_update: $1 is invalid'
@@ -71,6 +72,7 @@ progress_reporter_update()
 	[ -z $max ] && progress_reporter__errx 'progress_reporter_update: $1 is invalid'
 
 	cur=$2
+	[ -z $cur ] && { while read line; do cur=$line; done }
 	[ -z $cur ] && progress_reporter__errx 'progress_reporter_update: $2 is invalid'
 
 	[ $cur -lt $min ] && cur=$min

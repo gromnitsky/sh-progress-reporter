@@ -3,7 +3,7 @@
 # Convert ogg/mp4/whatever into mp3.
 # Unfortunately it's bash-specific due to 'read -d' in ffmpeg_convert().
 #
-# External tools: ffmpeg, awk
+# External tools: ffmpeg, awk, mktemp, tee
 
 SCRIPT_PATH=$(dirname $(realpath $0))
 . $SCRIPT_PATH/progress_reporter.sh

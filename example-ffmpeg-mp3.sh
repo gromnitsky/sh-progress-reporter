@@ -1,6 +1,7 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # Convert ogg/mp4/whatever into mp3.
+# Unfortunately it's bash-specific due to 'read -d' in ffmpeg_convert().
 #
 # External tools: ffmpeg, awk
 

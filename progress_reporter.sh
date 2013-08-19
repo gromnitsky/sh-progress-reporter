@@ -54,10 +54,10 @@ progress_reporter_new()
 {
 	[ -z $1 ] && progress_reporter__errx 'progress_reporter_new: $1 is invalid'
 	[ -z $2 ] && progress_reporter__errx 'progress_reporter_new: $2 is invalid'
-	echo $1 $2
+	echo $1,$2
 }
 
-# $1 - result from progress_reporter_new() in double quotes
+# $1 - result from progress_reporter_new()
 # $2 - current value
 progress_reporter_update()
 {
@@ -65,9 +65,9 @@ progress_reporter_update()
 	local max
 	local cur
 
-	min=${1% [0-9]*}
+	min=${1%,[0-9]*}
 	[ -z $min ] && progress_reporter__errx 'progress_reporter_update: $1 is invalid'
-	max=${1#[0-9]* }
+	max=${1#[0-9]*,}
 	[ -z $max ] && progress_reporter__errx 'progress_reporter_update: $1 is invalid'
 
 	cur=$2

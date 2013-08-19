@@ -12,16 +12,34 @@ conf_ffmpeg=ffmpeg
 conf_stream=a:0
 conf_bitrate=56
 
+conf_log=''
+conf_progname=${0##*/}
+
 errx()
 {
-    echo "${0##*/} error: $1" 1>&2
+    echo "$conf_progname error: $1" 1>&2
     exit 1
+}
+
+warnx()
+{
+    echo "$conf_progname warning: $1" 1>&2
 }
 
 usage()
 {
 	echo "Usage: ${0##*/} file [output-file]"
 	exit 64
+}
+
+log_new()
+{
+	conf_log=`mktemp /tmp/$conf_progname.XXXXXXXXXX`
+}
+
+log_remove()
+{
+	[ -z "$conf_log" ] || rm -f "$conf_log"
 }
 
 # $1 - file name
@@ -48,7 +66,7 @@ ffmpeg_convert()
 		-ac:${conf_stream} 2 \
 		-q:${conf_stream} 9 \
 		-map_metadata 0:s:${conf_stream} \
-		-y "$2" 2>&1 | {
+		-y "$2" 2>&1 | tee $conf_log | {
 		while read -d  line
 		do
 			echo $line | awk '/time=/ {
@@ -85,17 +103,21 @@ output=$2
 	[ "$1" = "$output" ] && output=${1%%.*}.1.mp3
 }
 
+trap 'log_remove; errx "stopped by a signal"' 1 2 15
+
 progress_reporter_begin "${input_ext}->mp3: "
 pr=`progress_reporter_new 0 $max`
 
-exit_code=0
+log_new
 ffmpeg_convert "$1" "$output"
 if [ $? -eq 0 ] ; then
 	progress_reporter_end 'done'
+	log_remove
+	echo ''
 else
 	progress_reporter_end 'conversion failed'
 	exit_code=1
+	echo ''
+	warnx "see $conf_log for more info"
+	exit 1
 fi
-
-echo ''
-exit $exit_code

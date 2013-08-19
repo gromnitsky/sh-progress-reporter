@@ -19,7 +19,7 @@ errx()
 
 usage()
 {
-	echo "Usage: ${0##*/} file"
+	echo "Usage: ${0##*/} file [output-file]"
 	exit 64
 }
 
@@ -78,7 +78,11 @@ max=`ffmpeg_getDuration "$1"`
 [ -z $max ] && errx "broken audio stream $conf_stream in: $1"
 
 input_ext=${1##*.}
-output=${1%%.*}.mp3
+output=$2
+[ -z "$output" ] && {
+	output=${1%%.*}.mp3
+	[ "$1" = "$output" ] && output=${1%%.*}.1.mp3
+}
 
 progress_reporter_begin "${input_ext}->mp3: "
 pr=`progress_reporter_new 0 $max`

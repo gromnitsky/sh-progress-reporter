@@ -1,7 +1,6 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 # Convert ogg/mp4/whatever into mp3.
-# Unfortunately it's bash-specific due to 'read -d' in ffmpeg_convert().
 #
 # External tools: ffmpeg, awk, mktemp, tee
 
@@ -66,14 +65,16 @@ ffmpeg_convert()
 		-ac:${conf_stream} 2 \
 		-q:${conf_stream} 9 \
 		-map_metadata 0:s:${conf_stream} \
-		-y "$2" 2>&1 | tee $conf_log | {
-		while read -d  line
-		do
-			echo $line | awk '/time=/ {
+		-y "$2" 2>&1 | tee $conf_log | \
+		awk -v RS= '/time=/ {
 raw=gensub(/.*time=([0-9:.]+).*/, "\\1", "");
 split(substr(raw, 0, 2*3+2), time, ":");
-printf "%d\n", time[1]*3600+time[2]*60+time[3]
-}' | progress_reporter_update $pr
+printf "%d\n", time[1]*3600+time[2]*60+time[3];
+fflush()
+}' | {
+		while read -r line
+		do
+			echo $line | progress_reporter_update $pr
 			ntimes=$((ntimes+1))
 		done
 

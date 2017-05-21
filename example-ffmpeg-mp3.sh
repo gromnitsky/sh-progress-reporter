@@ -47,7 +47,7 @@ log_remove()
 ffmpeg_getDuration()
 {
 	$conf_ffmpeg -i "$1" 2>&1 -vn | \
-		awk '/Duration/ {
+		gawk '/Duration/ {
 split(substr($2, 0, 2*3+2), time, ":");
 printf "%d\n", time[1]*3600+time[2]*60+time[3]
 }'
@@ -66,8 +66,8 @@ ffmpeg_convert()
 		-q:${conf_stream} 9 \
 		-map_metadata 0:s:${conf_stream} \
 		-y "$2" 2>&1 | tee $conf_log | \
-		awk -v RS= '/time=/ {
-raw=gensub(/.*time=([0-9:.]+).*/, "\\1", "");
+		gawk -v RS= '/time=/ {
+raw=gensub(/.*time=([0-9:.]+).*/, "\\1", 1);
 split(substr(raw, 0, 2*3+2), time, ":");
 printf "%d\n", time[1]*3600+time[2]*60+time[3];
 fflush()

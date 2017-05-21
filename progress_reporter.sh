@@ -46,8 +46,8 @@ progress_reporter_begin()
 	printf "%${PROGRESS_REPORTER__WIDTH_CUR}d%%" 0
 }
 
-# $1 - min value
-# $2 - max value
+# $1 - min value (>= 0)
+# $2 - max value (>= 0)
 #
 # Return a tuple with 2 numbers
 progress_reporter_new()
@@ -67,7 +67,7 @@ progress_reporter_update()
 	local line
 
 	min=${1%,[0-9]*}
-	[ -z $min ] && progress_reporter__errx 'progress_reporter_update: $1 is invalid'
+	[ ! -z "$min" ] && [ $min -ge 0 ] || progress_reporter__errx 'progress_reporter_update: $1 is invalid'
 	max=${1#[0-9]*,}
 	[ -z $max ] && progress_reporter__errx 'progress_reporter_update: $1 is invalid'
 
@@ -79,7 +79,11 @@ progress_reporter_update()
 	[ $cur -gt $max ] && cur=$max
 
 	progress_reporter__next
-	echo $cur $max | awk "{printf \"%${PROGRESS_REPORTER__WIDTH_CUR}d%%\", (\$1/\$2) * 100}"
+	if [ $max = 0 ] ; then
+		printf "%${PROGRESS_REPORTER__WIDTH_CUR}d%%" 100
+	else
+		echo $cur $max | awk "{printf \"%${PROGRESS_REPORTER__WIDTH_CUR}d%%\", (\$1/\$2) * 100}"
+	fi
 }
 
 # $1 - message (optional)

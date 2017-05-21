@@ -1,12 +1,12 @@
-# Simple progress reporter for sh scripts
+# A simple progress reporter for sh scripts
 
 JFF.
 
-Clone the repo & run `example-simple.sh`. It displays something like
+Clone the repo & run `example-simple.sh`. It'll display something like
 
     Converting:                                                11%
 
-and then *on the same line*:
+and then (on the same line):
 
     Converting:                                                 ok
 
@@ -26,21 +26,22 @@ and then *on the same line*:
 ## Requirements
 
 * /bin/sh in FreeBSD or bash in Fedora.
-* expr, seq, awk.
+* expr, seq, gawk.
 
 ## ffmpeg
 
-For more useful example, see `example-ffmpeg-mp3.sh`. The script takes
-some audio file, for example `test/data/amwb-20110805.ogg` & with ffmpeg
-help produces an .mp3 file. It does it with hiding all ffmpeg horrible
-garbage. The only thing you will see is:
+For a more useful example, see `example-ffmpeg-mp3.sh`. The script
+takes an audio file, for example `test/data/amwb-20110805.ogg` &
+produces an .mp3. While ffmpeg is doing its job, the script hides all
+the garbage that ffmpeg prints. The only thing the user sees is:
 
     ogg->mp3: 19%
+
+<video src="https://zippy.gfycat.com/NeglectedDifferentHog.webm" autoplay="autoplay" loop="loop"></video>
 
 ## TODO
 
 - shunit2 tests but today is a lazy August day;
-- write a similar util for uraniacast.
 
 ## License
 

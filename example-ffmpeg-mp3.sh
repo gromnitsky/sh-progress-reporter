@@ -100,8 +100,8 @@ max=`ffmpeg_getDuration "$1"`
 input_ext=${1##*.}
 output=$2
 [ -z "$output" ] && {
-	output=${1%%.*}.mp3
-	[ "$1" = "$output" ] && output=${1%%.*}.1.mp3
+	output=${1%.*}.mp3
+	[ "$1" = "$output" ] && output=${1%.*}.1.mp3
 }
 
 trap 'log_remove; errx "stopped by a signal"' 1 2 15

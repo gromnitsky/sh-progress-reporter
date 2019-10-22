@@ -30,18 +30,18 @@ and then (on the same line):
 
 ## ffmpeg
 
-For a more useful example, see `example-ffmpeg-mp3.sh`. The script
-takes an audio file, for example `test/data/amwb-20110805.ogg` &
-produces an .mp3. While ffmpeg is doing its job, the script hides all
-the garbage that ffmpeg prints. The only thing the user sees is:
+For a more useful example, see `example-ffmpeg.sh`--a drop-in wrapper
+around ffmpeg (tested w/ 4.1.4). The script passes down all CLAs to
+ffmpeg, but hides all the garbage it prints. The only thing a user
+sees is:
 
-    ogg->mp3: 19%
+    ffmpeg (foobar.m4a): 19%
 
-<video src="https://zippy.gfycat.com/NeglectedDifferentHog.webm" autoplay="autoplay" loop="loop"></video>
+![gif](http://sigwait.tk/~alex/demo/misc/example-ffmpeg.sh.gif)
 
 ## TODO
 
-- shunit2 tests but today is a lazy August day;
+- shunit2 tests but today (2013-08-19) is a lazy August day;
 
 ## License
 
